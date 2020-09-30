@@ -1,27 +1,24 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Button, Form, Input } from 'antd'
+import PropTypes from 'prop-types'
+import useInput from './hooks/useInput'
+
 import Link from 'next/link'
 import styled from 'styled-components'
 
 const ButtonWarpper = styled.div`
-    margin-top: 2%
+    margin-top: 2%;
 `
-
+const FormWarpper = styled(Form)`
+    padding: 1%;
+`
 // useMemo : 값을 캐싱함
 // useCallback : 함수를 캐싱함
 
-const LoginForm = () => {
-    const [id, setId] = useState('')
-    const [password, setPassword] = useState('')
+const LoginForm = ({ setIsLoggedIn }) => {
+    const [id, onChangeId] = useInput('')
+    const [password, onChangePassword] = useInput('')
     const [passwordCheck, setPasswordCheck] = useState('')
-
-    const onChangeId = useCallback((e) => {
-        setId(e.target.value)
-    }, [])
-
-    const onChangePassword = useCallback((e) => {
-        setPassword(e.target.value)
-    }, [])
 
     // 스타일 최적화 방법 --> 리렌더링시 각자 다른 객체나 값으로 렌더링 되는 것을 방지 하기 위해서, 
     // 안라인 스타일링을 쓰려면
@@ -31,8 +28,14 @@ const LoginForm = () => {
     //     setPasswordCheck(e.target.value)
     // }
 
+    const onSubmitForm = useCallback(() => {
+        //  e.preventDefault(); --> onFinish에는 이미 포함 되어 있음.
+        console.log(id, password)
+        setIsLoggedIn(true)
+    }, [id, password])
+
     return (
-        <Form>
+        <FormWarpper onFinish={onSubmitForm}>
             <div>
                 <label htmlFor="user-id">
                     아이디
@@ -61,11 +64,15 @@ const LoginForm = () => {
             {/* <div style={style}> --> 리렌더링 방지 하기 위해 useMemo를 사용함*/}
             <ButtonWarpper>
                 <Button type="primary" htmlType="submit" loading="false" >로그인</Button>
-                <Link href="/signin"><a><Button>회원가입</Button></a></Link>
+                <Link href="/signup"><a><Button>회원가입</Button></a></Link>
             </ButtonWarpper>
             {/* </div> */}
-        </Form >
+        </FormWarpper>
     )
 }
 
 export default LoginForm
+
+LoginForm.propTypes = {
+    setIsLoggedIn: PropTypes.func.isRequired
+}
