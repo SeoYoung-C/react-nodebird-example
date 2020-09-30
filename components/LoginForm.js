@@ -1,10 +1,13 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Button, Form, Input } from 'antd'
-import PropTypes from 'prop-types'
 import useInput from './hooks/useInput'
 
 import Link from 'next/link'
 import styled from 'styled-components'
+
+import { useDispatch } from 'react-redux'
+
+import { loginAction } from '../reducers'
 
 const ButtonWarpper = styled.div`
     margin-top: 2%;
@@ -15,7 +18,9 @@ const FormWarpper = styled(Form)`
 // useMemo : 값을 캐싱함
 // useCallback : 함수를 캐싱함
 
-const LoginForm = ({ setIsLoggedIn }) => {
+const LoginForm = () => {
+    const dispatch = useDispatch()
+
     const [id, onChangeId] = useInput('')
     const [password, onChangePassword] = useInput('')
     const [passwordCheck, setPasswordCheck] = useState('')
@@ -30,15 +35,14 @@ const LoginForm = ({ setIsLoggedIn }) => {
 
     const onSubmitForm = useCallback(() => {
         //  e.preventDefault(); --> onFinish에는 이미 포함 되어 있음.
-        console.log(id, password)
-        setIsLoggedIn(true)
+        dispatch(loginAction({ id, password }))
     }, [id, password])
 
     return (
         <FormWarpper onFinish={onSubmitForm}>
             <div>
                 <label htmlFor="user-id">
-                    아이디
+                    ID
                 </label>
                 <br />
                 <Input name="user-id" value={id} onChange={onChangeId} required />
@@ -46,7 +50,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
 
             <div>
                 <label htmlFor="user-id">
-                    비밀번호
+                    Password
                 </label>
                 <br />
                 <Input name="user-password" value={password} onChange={onChangePassword} required type="password" />
@@ -73,6 +77,3 @@ const LoginForm = ({ setIsLoggedIn }) => {
 
 export default LoginForm
 
-LoginForm.propTypes = {
-    setIsLoggedIn: PropTypes.func.isRequired
-}
