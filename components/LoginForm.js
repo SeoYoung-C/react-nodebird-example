@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { useDispatch } from 'react-redux'
 
-import { loginAction } from '../reducers'
+import { loginAction } from '../reducers/user'
 
 const ButtonWarpper = styled.div`
     margin-top: 2%;

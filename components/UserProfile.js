@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 
 import { Card, Avatar, Button } from 'antd'
-import { logoutAction } from '../reducers'
+import { logoutAction } from '../reducers/user'
 
 import { useDispatch } from 'react-redux'
 
