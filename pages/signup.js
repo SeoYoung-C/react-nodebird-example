@@ -3,9 +3,13 @@ import Head from 'next/head'
 import { Button, Checkbox, Form, Input } from 'antd'
 import AppLayout from '../components/AppLayout'
 import useInput from '../components/hooks/useInput'
+import { SIGN_UP_REQUEST } from '../reducers/user'
+import { useDispatch } from 'react-redux'
 
 
 const Signup = () => {
+    const dispatch = useDispatch()
+    const signUpLoading = useSelector((state) => state.user)
     const errorStyle = useMemo(() => ({ color: 'red' }), [])
     const divStyle = useMemo(() => ({ marginTop: '1%', textAlign: 'right' }), [])
 
@@ -14,7 +18,7 @@ const Signup = () => {
     const [passwordError, setPasswordError] = useState(false);
     const [termError, setTermError] = useState(false);
 
-    const [id, onChangeId] = useInput('');
+    const [email, onChangeEmail] = useInput('');
     const [nickname, onChangeNickname] = useInput('');
     const [password, onChangePassword] = useInput('');
 
@@ -25,7 +29,11 @@ const Signup = () => {
         if (!term) {
             return setTermError(true);
         }
-        console.log(id, nickname, password)
+        console.log(email, password, nickname)
+        dispatch({
+            type: SIGN_UP_REQUEST,
+            data: { email, password, nickname }
+        })
     }, [password, passwordCheck, term]);
 
     const onChangePasswordCheck = useCallback((e) => {
@@ -47,9 +55,9 @@ const Signup = () => {
             </Head>
             <Form onFinish={onSubmit}>
                 <div>
-                    <label htmlFor="user-id">ID</label>
+                    <label htmlFor="user-email">E-Mail</label>
                     <br />
-                    <Input name="user-id" value={id} required onChange={onChangeId} />
+                    <Input name="user-email" value={email} type="email" required onChange={onChangeEmail} />
                 </div>
                 <div>
                     <label htmlFor="user-nick">Nickname</label>
@@ -76,7 +84,7 @@ const Signup = () => {
                     </div>}
                 </div>
                 <div style={divStyle}>
-                    <Button type="primary" htmlType="submit">Sign Up</Button>
+                    <Button type="primary" htmlType="submit" loading={signUpLoading}>Sign Up</Button>
                 </div>
             </Form>
         </AppLayout>

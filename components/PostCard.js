@@ -15,7 +15,7 @@ const PostCard = ({ post }) => {
     //const id = me?.id --> optioner chaining 
 
     const onToggleLike = useCallback(() => {
-        setLiked((prev) => !prev);
+        setLiked((prev) => !prev)
     }, [])
 
     const onToggleComment = useCallback(() => {

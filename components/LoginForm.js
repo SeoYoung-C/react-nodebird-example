@@ -1,13 +1,13 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Button, Form, Input } from 'antd'
 import useInput from './hooks/useInput'
 
 import Link from 'next/link'
 import styled from 'styled-components'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { loginAction } from '../reducers/user'
+import { loginRequestAction } from '../reducers/user'
 
 const ButtonWarpper = styled.div`
     margin-top: 2%;
@@ -20,8 +20,9 @@ const FormWarpper = styled(Form)`
 
 const LoginForm = () => {
     const dispatch = useDispatch()
+    const { logInLoding } = useSelector((state) => state.user)
 
-    const [id, onChangeId] = useInput('')
+    const [email, onChangeEmail] = useInput('')
     const [password, onChangePassword] = useInput('')
     const [passwordCheck, setPasswordCheck] = useState('')
 
@@ -35,17 +36,17 @@ const LoginForm = () => {
 
     const onSubmitForm = useCallback(() => {
         //  e.preventDefault(); --> onFinish에는 이미 포함 되어 있음.
-        dispatch(loginAction({ id, password }))
-    }, [id, password])
+        dispatch(loginRequestAction({ email, password }))
+    }, [email, password])
 
     return (
         <FormWarpper onFinish={onSubmitForm}>
             <div>
                 <label htmlFor="user-id">
-                    ID
+                    E-Mail
                 </label>
                 <br />
-                <Input name="user-id" value={id} onChange={onChangeId} required />
+                <Input name="user-id" value={email} type="email" onChange={onChangeEmail} required />
             </div>
 
             <div>
@@ -67,7 +68,7 @@ const LoginForm = () => {
 
             {/* <div style={style}> --> 리렌더링 방지 하기 위해 useMemo를 사용함*/}
             <ButtonWarpper>
-                <Button type="primary" htmlType="submit" loading="false" >로그인</Button>
+                <Button type="primary" htmlType="submit" loading={logInLoding} >로그인</Button>
                 <Link href="/signup"><a><Button>회원가입</Button></a></Link>
             </ButtonWarpper>
             {/* </div> */}
