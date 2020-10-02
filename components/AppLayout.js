@@ -49,7 +49,7 @@ const AppLayout = ({ children }) => {
                     {/* <a href="https://www.zerocho.com" target="_blank" rel="noreferrer noopener">
                         {'made by Zerocho'}
                     </a> */}
-                    {'made by SeoYoung'}
+                    {'made by Seoyoung'}
 
                 </Col>
 

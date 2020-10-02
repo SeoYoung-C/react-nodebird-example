@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Card, Popover, Avatar } from 'antd'
+import { Button, Card, Popover, Avatar, List } from 'antd'
 import { EllipsisOutlined, HeartOutlined, MessageOutlined, RetweetOutlined, HeartTwoTone } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import PostImages from './PostImages'
+import PostCardContent from './PostCardContent'
 
 const PostCard = ({ post }) => {
     const id = useSelector((state) => { state.user.me?.id })
@@ -11,7 +12,7 @@ const PostCard = ({ post }) => {
     const [commentFormOpend, setCommentFormOpend] = useState(false)
     // const { me } = useSelector((state) => { state.user })
     // const id = me && me.id
-    //const id = me?.id
+    //const id = me?.id --> optioner chaining 
 
     const onToggleLike = useCallback(() => {
         setLiked((prev) => !prev);
@@ -20,6 +21,7 @@ const PostCard = ({ post }) => {
     const onToggleComment = useCallback(() => {
         setCommentFormOpend((prev) => !prev)
     }, [])
+
     return (
         <div style={{ marginBottom: '20px' }}>
             <Card
@@ -49,22 +51,33 @@ const PostCard = ({ post }) => {
                 <Card.Meta
                     avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
                     title={post.User.nickname}
-                    description={post.content}
+                    description={<PostCardContent postData={post.content} />}
                 />
 
-                {/* <Image />
-                <Contents />
-                <Buttons /> */}
             </Card>
-            {
-                commentFormOpend && (
-                    <div>
-                        comment
-                    </div>
-                )
-            }
-            {/* <CommentForm />
-            <Comments /> */}
+            {commentFormOpend && (
+                <>
+                    <CommentForm post={post} />
+                    <List
+                        header={`${post.Comments.length} 댓글`}
+                        itemLayout="horizontal"
+                        dataSource={post.Comments}
+                        renderItem={(item) => (
+                            <li>
+                                <Comment
+                                    author={item.User.nickname}
+                                    avatar={(
+                                        <Link href={{ pathname: '/user', query: { id: item.User.id } }} as={`/user/${item.User.id}`}>
+                                            <a><Avatar>{item.User.nickname[0]}</Avatar></a>
+                                        </Link>
+                                    )}
+                                    content={item.content}
+                                />
+                            </li>
+                        )}
+                    />
+                </>
+            )}
         </div >
     )
 }
