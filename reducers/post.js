@@ -10,23 +10,30 @@ export const initialState = {
         content: 'first post, #hashtag #express',
         Images: [
             {
+                id: shortId.generate(),
                 src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
             },
             {
+                id: shortId.generate(),
                 src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
             },
             {
+                id: shortId.generate(),
                 src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
             }
         ],
         Comments: [
             {
+                id: shortId.generate(),
                 User: {
+                    id: shortId.generate(),
                     nickname: 'nero'
                 },
                 content: 'this is first post!!'
             }, {
+                id: shortId.generate(),
                 User: {
+                    id: shortId.generate(),
                     nickname: 'hero'
                 },
                 content: 'Woooooooooow!'
@@ -38,6 +45,9 @@ export const initialState = {
     addPostLoading: false,
     addPostDone: false,
     addPostError: false,
+    removePostLoading: false,
+    removePostDone: false,
+    removePostError: false,
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: false,
@@ -48,9 +58,17 @@ export const ADD_POST_REQUEST = 'ADD_POST_REQUEST'
 export const ADD_POST_SUCESS = 'ADD_POST_SUCESS'
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE'
 
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST'
+export const REMOVE_POST_SUCESS = 'REMOVE_POST_SUCESS'
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE'
+
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST'
 export const ADD_COMMENT_SUCESS = 'ADD_COMMENT_SUCESS'
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE'
+
+
+
+
 
 export const addPost = (data) => ({
     type: ADD_POST_REQUEST,
@@ -63,8 +81,8 @@ export const addComment = (data) => ({
 
 const dummyPost = (data) => (
     {
-        id: 1,
-        content: data,
+        id: data.id,
+        content: data.content,
         User: {
             id: 1,
             nickname: 'seoyoung'
@@ -105,6 +123,27 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 addPostLoading: false,
                 addPostError: action.error,
+            }
+
+        case REMOVE_POST_REQUEST:
+            return {
+                ...state,
+                removePostLoading: true,
+                removePostDone: false,
+                removePostError: null,
+            }
+        case REMOVE_POST_SUCESS:
+            return {
+                ...state,
+                removePostLoading: false,
+                removePostDone: true,
+                mainPosts: state.mainPosts.filter((v) => v.id !== action.data),
+            }
+        case REMOVE_POST_FAILURE:
+            return {
+                ...state,
+                removePostLoading: false,
+                removePostError: action.error,
             }
 
         case ADD_COMMENT_REQUEST:
