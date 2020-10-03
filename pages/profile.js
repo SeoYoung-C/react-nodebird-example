@@ -11,6 +11,7 @@ const Profile = () => {
     // const FollowersList = [{ nickname: 'sera' }, { nickname: 'jaden' }, { nickname: 'mickle' }]
     // const FollowingsList = [{ nickname: 'sera' }, { nickname: 'jaden' }, { nickname: 'mickle' }]
     const { me } = useSelector((state) => state.user)
+
     return (
         <>
             <Head>

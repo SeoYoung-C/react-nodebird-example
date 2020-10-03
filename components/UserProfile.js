@@ -19,7 +19,7 @@ const UserProfile = () => {
             actions={[
                 // React에서 배열로 html을 작성할 경우 key 값을 꼭 붙여줘야 한다
                 <div key="twit">
-                    twit <br /> {me.post.length}
+                    twit <br /> {me.Post.length}
                 </div>,
                 <div key="followings">
                     followings <br /> {me.Followings.length}

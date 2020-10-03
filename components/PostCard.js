@@ -1,13 +1,16 @@
 import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Card, Popover, Avatar, List } from 'antd'
+import { Card, Button, Avatar, List, Comment, Popover } from 'antd'
 import { EllipsisOutlined, HeartOutlined, MessageOutlined, RetweetOutlined, HeartTwoTone } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import PostImages from './PostImages'
 import PostCardContent from './PostCardContent'
+import CommentForm from './CommentForm'
+import Link from 'next/link'
 
 const PostCard = ({ post }) => {
-    const id = useSelector((state) => { state.user.me?.id })
+    const { me } = useSelector((state) => state.user);
+    const id = me?.id
     const [liked, setLiked] = useState(false)
     const [commentFormOpend, setCommentFormOpend] = useState(false)
     // const { me } = useSelector((state) => { state.user })
@@ -21,6 +24,9 @@ const PostCard = ({ post }) => {
     const onToggleComment = useCallback(() => {
         setCommentFormOpend((prev) => !prev)
     }, [])
+
+    console.log('id', id)
+    console.log(post.User.id)
 
     return (
         <div style={{ marginBottom: '20px' }}>
@@ -38,7 +44,7 @@ const PostCard = ({ post }) => {
                                 id && post.User.id === id ? (
                                     <>
                                         <Button>Modify</Button>
-                                        <Button>Delete</Button>
+                                        <Button type="danger">Delete</Button>
                                     </>
                                 ) : <Button>Report</Button>
                             }
@@ -86,12 +92,13 @@ export default PostCard
 
 PostCard.propTypes = {
     post: PropTypes.shape({
-        id: PropTypes.number,
+        id: PropTypes.string,
         User: PropTypes.object,
+        UserId: PropTypes.number,
         content: PropTypes.string,
-        createAt: PropTypes.object,
-        Comments: PropTypes.arrayOf(PropTypes.object),
-        Images: PropTypes.arrayOf(PropTypes.object)
+        createdAt: PropTypes.object,
+        Comments: PropTypes.arrayOf(PropTypes.any),
+        Images: PropTypes.arrayOf(PropTypes.any),
 
     }).isRequired
 }

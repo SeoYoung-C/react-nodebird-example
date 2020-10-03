@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 
 const Signup = () => {
     const dispatch = useDispatch()
+
     const signUpLoading = useSelector((state) => state.user)
     const errorStyle = useMemo(() => ({ color: 'red' }), [])
     const divStyle = useMemo(() => ({ marginTop: '1%', textAlign: 'right' }), [])

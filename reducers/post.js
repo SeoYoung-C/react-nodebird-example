@@ -1,10 +1,11 @@
+import shortId from 'shortid'
 
 export const initialState = {
     mainPosts: [{
         id: 1,
         User: {
             id: 1,
-            nickname: 'Seoyoung',
+            nickname: 'seoyoung',
         },
         content: 'first post, #hashtag #express',
         Images: [
@@ -60,16 +61,28 @@ export const addComment = (data) => ({
     data
 })
 
-const dummyPost = {
-    id: 2,
-    content: 'dummy data',
+const dummyPost = (data) => (
+    {
+        id: 1,
+        content: data,
+        User: {
+            id: 1,
+            nickname: 'seoyoung'
+        },
+        Images: [],
+        Comments: []
+    }
+)
+
+const dummyComment = (data) => ({
+
+    id: shortId.generate(),
+    content: data,
     User: {
-        id: 2,
-        nickname: 'Seoyoung'
+        id: 1,
+        nickname: 'seoyoung'
     },
-    Images: [],
-    Comments: []
-}
+})
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -85,7 +98,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 addPostLoading: false,
                 addPostDone: true,
-                mainPosts: [dummyPost, ...state.mainPosts],
+                mainPosts: [dummyPost(action.data), ...state.mainPosts],
             }
         case ADD_POST_FAILURE:
             return {
@@ -103,11 +116,17 @@ const reducer = (state = initialState, action) => {
 
             }
         case ADD_COMMENT_SUCESS:
+            const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId)
+            const post = { ...state.mainPosts[postIndex] }
+            post.Comments = [dummyComment(action.data.content), ...post.Comments]
+            const mainPosts = [...state.mainPosts]
+            mainPosts[postIndex] = post
+
             return {
                 ...state,
+                mainPosts,
                 addCommentLoading: false,
                 addCommentDone: true,
-                mainPosts: [dummyPost, ...state.mainComment],
             }
         case ADD_COMMENT_FAILURE:
             return {
