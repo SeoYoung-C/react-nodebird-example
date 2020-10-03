@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import PostImages from './PostImages'
 import PostCardContent from './PostCardContent'
 import CommentForm from './CommentForm'
+import FollowButton from './FollowButton'
 import Link from 'next/link'
 import { REMOVE_POST_REQUEST } from '../reducers/post'
 
@@ -60,6 +61,7 @@ const PostCard = ({ post }) => {
                         <EllipsisOutlined />
                     </Popover>
                 ]}
+                extra={id && <FollowButton post={post} />}
             >
                 <Card.Meta
                     avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
@@ -99,7 +101,7 @@ export default PostCard
 
 PostCard.propTypes = {
     post: PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.number,
         User: PropTypes.object,
         UserId: PropTypes.number,
         content: PropTypes.string,

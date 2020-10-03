@@ -6,6 +6,14 @@ import {
     UNFOLLOW_REQUEST, UNFOLLOW_SUCESS, UNFOLLOW_FAILURE
 } from '../reducers/user'
 
+function followAPI(data) {
+    return axios.post('/api/follow', data)
+}
+
+function unfollowAPI(data) {
+    return axios.post('/api/unfollow', data)
+}
+
 function logInAPI(data) {
     return axios.post('/api/login', data)
 }
@@ -15,7 +23,41 @@ function logOutAPI() {
 }
 
 function signUpAPI() {
-    return axios.post('/api/logout')
+    return axios.post('/api/signup')
+}
+
+function* follow(action) {
+    try {
+        // const result = yield call(followAPI, action.data)
+        yield delay(1000)
+        yield put({
+            type: FOLLOW_SUCESS,
+            data: action.data
+        })
+    } catch (err) {
+        yield put({
+            type: FOLLOW_FAILURE,
+            // data: err.response.data
+        })
+    }
+
+}
+
+function* unfollow(action) {
+    try {
+        // const result = yield call(unfollowAPI, action.data)
+        yield delay(1000)
+        yield put({
+            type: UNFOLLOW_SUCESS,
+            data: action.data
+        })
+    } catch (err) {
+        yield put({
+            type: UNFOLLOW_FAILURE,
+            // data: err.response.data
+        })
+    }
+
 }
 
 function* logIn(action) {
@@ -69,6 +111,14 @@ function* signUp() {
 
 }
 
+function* watchFollow() {
+    yield takeLatest(FOLLOW_REQUEST, follow)
+}
+
+function* watchUnfollow() {
+    yield takeLatest(UNFOLLOW_REQUEST, unfollow)
+}
+
 function* watchLogin() {
     // yield take('LOG_IN_REQUEST', logIn) // 1회용! --> take
     //-------------------------------------------------
@@ -95,6 +145,8 @@ export default function* userSaga() {
     yield all([
         // fork -> 비동기 함수 (none blocking)
         // call  -> 동기 함수 (call.then(() =>))
+        fork(watchFollow),
+        fork(watchUnfollow),
         fork(watchLogin),
         fork(watchLogOut),
         fork(watchSignUp),
